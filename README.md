@@ -1,7 +1,7 @@
 # 📊 Machine Test - MERN Stack
 
 ## 🎥 Demo
-- **Video Walkthrough:** [https://drive.google.com/file/d/1YY5cuyMVdWp5Gy-oV3aYlJPzg-9FHhTM/view?usp=sharing](Video)  
+- **Video Walkthrough:** [https://drive.google.com/file/d/1YY5cuyMVdWp5Gy-oV3aYlJPzg-9FHhTM/view?usp=sharing](https://drive.google.com/file/d/1YY5cuyMVdWp5Gy-oV3aYlJPzg-9FHhTM/view?usp=sharing)  
 - **Hosted App:** [https://assignmentmachine-test.vercel.app/dashboard](https://assignmentmachine-test.vercel.app/)  
 
 ---
