@@ -16,7 +16,7 @@ await connectDB();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://betterfronted.vercel.app',
+  'https://assignmentmachine-test.vercel.app',
 ];
 
 app.use(cors({
