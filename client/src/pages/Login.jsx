@@ -1,28 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const navigate = useNavigate();
-  const API_URL = "http://localhost:3001/api/auth";
-
-  // Handle input change
+  const API_URL = "https://machinez-test.vercel.app/api/auth";
+ 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  // Handle form submit
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    setSuccess("");
 
     try {
       const endpoint = isLogin ? "login" : "signup";
@@ -33,25 +29,27 @@ export default function Auth() {
       const { data } = await axios.post(`${API_URL}/${endpoint}`, payload);
 
       if (isLogin) {
-        // ✅ After login -> Save token and go to dashboard
-        if (data.token) {
+        if (data.token) { 
           localStorage.setItem("token", data.token);
           if (data.user) localStorage.setItem("user", JSON.stringify(data.user));
 
-          setSuccess("Login successful! Redirecting...");
-          setTimeout(() => navigate("/dashboard"), 1000);
+          toast.success("Login successful!");
+
+          
+          setTimeout(() => {
+            navigate("/dashboard");
+            window.location.reload(); 
+          }, 1000);
         }
       } else {
-        // ✅ After signup -> switch to Login form
-        setSuccess("Signup successful! Please login.");
+        toast.success("🎉 Signup successful! Please login.");
         setTimeout(() => {
           setIsLogin(true);
-          setFormData({ name: "", email: "", password: "" }); // clear form
-          setSuccess("");
-        }, 1500);
+          setFormData({ name: "", email: "", password: "" });
+        }, 2000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong!");
+      toast.error(`❌ ${err.response?.data?.message || "Something went wrong!"}`);
     } finally {
       setLoading(false);
     }
@@ -60,7 +58,6 @@ export default function Auth() {
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md p-8 rounded-2xl shadow-lg bg-white border border-gray-200">
-        
         {/* Header */}
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           {isLogin ? "Welcome Back 👋" : "Create an Account ✨"}
@@ -87,16 +84,6 @@ export default function Auth() {
             Signup
           </button>
         </div>
-
-        {/* Error */}
-        {error && (
-          <div className="mb-4 text-center text-red-500 font-medium">{error}</div>
-        )}
-
-        {/* Success */}
-        {success && (
-          <div className="mb-4 text-center text-green-600 font-medium">{success}</div>
-        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,8 +1,9 @@
-// Distribute rows equally among agents
+
+
 export const distributeEqually = (rows, agents) => {
   const distributed = {};
-  const agentCount = 5; // Requirement: 5 agents
-  const selectedAgents = agents.slice(0, agentCount); // take first 5 agents
+  const agentCount = 5; 
+  const selectedAgents = agents.slice(0, agentCount); 
 
   let i = 0;
   for (const row of rows) {

@@ -1,57 +1,62 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Upload() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [uploaded, setUploaded] = useState(false); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
-      return setMessage("⚠️ Please upload a file.");
+      return toast.warn("⚠️ Please upload a file.");
     }
 
-    // validate extension
     const allowedExtensions = ["csv", "xls", "xlsx"];
     const fileExtension = file.name.split(".").pop().toLowerCase();
     if (!allowedExtensions.includes(fileExtension)) {
-      return setMessage("❌ Only CSV, XLS, and XLSX files are allowed.");
+      return toast.error("❌ Only CSV, XLS, and XLSX files are allowed.");
     }
 
     try {
       setLoading(true);
-      setMessage("");
 
       const formData = new FormData();
       formData.append("file", file);
 
-      // get token from localStorage
+      
       const token = localStorage.getItem("token");
 
-      const res = await axios.post("http://localhost:3001/api/upload", formData, {
-        headers: { 
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // ✅ Apply token
-        },
-      });
+      const res = await axios.post(
+        "https://machinez-test.vercel.app/api/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      setMessage(`✅ ${res.data.message || "File uploaded & distributed!"}`);
+      toast.success(`${res.data.message || "File uploaded & distributed!"}`);
       setFile(null);
+      setUploaded(true); 
     } catch (err) {
       console.error(err);
-      setMessage("❌ Upload failed. Please try again.");
+      toast.error("❌ Upload failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-2xl font-bold mb-4">📂 Upload Leads</h1>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+      <h1 className="text-2xl font-bold mb-4 text-center sm:text-center">📂 Upload Leads</h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-xl shadow-md max-w-md space-y-4"
+        className="bg-white p-6 rounded-xl shadow-md max-w-md mx-auto space-y-4"
       >
         <input
           type="file"
@@ -59,9 +64,24 @@ export default function Upload() {
           onChange={(e) => setFile(e.target.files[0])}
           className="w-full border p-3 rounded-lg"
         />
-        <p className="text-sm text-gray-500">
-          ✅ Accepted formats: <b>.csv, .xls, .xlsx</b>
-        </p>
+        <div className="mt-3 p-3 rounded-lg border border-blue-300 bg-blue-50 flex items-center gap-2">
+          <svg
+            className="w-5 h-5 text-blue-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
+            />
+          </svg>
+          <p className="text-sm text-blue-700">
+            Accepted formats: <b>.csv, .xls, .xlsx</b>
+          </p>
+        </div>
 
         <button
           type="submit"
@@ -72,9 +92,18 @@ export default function Upload() {
         </button>
       </form>
 
-      {message && (
-        <div className="mt-4 p-3 rounded-lg bg-gray-100 text-sm font-medium">
-          {message}
+      {uploaded && (
+        <div className="mt-6 max-w-md mx-auto w-full sm:w-1/2 md:w-1/3">
+          <Link
+            to="/distribution_reports"
+            className="block bg-white p-6 rounded-xl shadow-md transition transform hover:scale-[1.02] hover:shadow-xl hover:bg-gray-50 active:scale-[0.98] cursor-pointer"
+          >
+            <h2 className="text-xl font-semibold mb-2">📈 Reports</h2>
+            <p className="text-gray-600">
+              View distribution reports{" "}
+              <span className="text-blue-600 font-medium">(Click to view details)</span>.
+            </p>
+          </Link>
         </div>
       )}
     </div>

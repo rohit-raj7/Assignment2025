@@ -3,14 +3,14 @@ import Lead from '../models/Lead.js';
 import { parseBuffer } from '../utils/parseUpload.js';
 import { distributeEqually } from '../utils/distribute.js';
 
-// @desc Upload & distribute leads
+
 export const uploadLeads = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    // Validate file type
+    
     const allowed = [
       'text/csv',
       'application/vnd.ms-excel', // .xls
@@ -20,20 +20,20 @@ export const uploadLeads = async (req, res) => {
       return res.status(400).json({ message: 'Invalid file type. Only CSV/XLSX/XLS allowed.' });
     }
 
-    // Parse rows
+    
     const rows = await parseBuffer(req.file);
 
     if (!rows || rows.length === 0) {
       return res.status(400).json({ message: 'Uploaded file is empty or invalid format' });
     }
 
-    // Validate headers
+    
     const sample = rows[0];
     if (!('FirstName' in sample && 'Phone' in sample && 'Notes' in sample)) {
       return res.status(400).json({ message: 'Invalid file format. Must contain FirstName, Phone, Notes' });
     }
 
-    // Fetch agents
+    
     const agents = await Agent.find();
     if (agents.length === 0) {
       return res.status(400).json({ message: 'No agents found. Please add agents first.' });

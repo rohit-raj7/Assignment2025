@@ -4,7 +4,7 @@ import auth  from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Get all leads grouped by agent
+
 router.get('/grouped', auth, async (_req, res) => {
   const leads = await Lead.find().populate('agent').lean();
 

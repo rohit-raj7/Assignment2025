@@ -5,7 +5,7 @@ import { createAgent, listAgents, deleteAgent } from '../controllers/agentContro
 
 const router = express.Router();
 
-// Seed admin (dev use)
+
 router.post('/signup', signup);
 router.post('/login', login);
 

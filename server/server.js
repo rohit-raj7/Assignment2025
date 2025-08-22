@@ -1,4 +1,5 @@
-// server.js
+
+
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
@@ -10,7 +11,7 @@ import uploadRoutes from './routes/upload.routes.js'
 
 const app = express();
 
-// Connect to DB
+
 await connectDB();
 
 const allowedOrigins = [

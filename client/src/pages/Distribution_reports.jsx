@@ -12,7 +12,7 @@ export default function AllAgents() {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/api/leads/grouped", {
+        const res = await axios.get("https://machinez-test.vercel.app/api/leads/grouped", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAgents(res.data);

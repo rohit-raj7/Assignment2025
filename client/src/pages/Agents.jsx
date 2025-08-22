@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ import navigate
+import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { User, Mail, Phone, Lock } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function Agents() {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    mobile: "", // ✅ changed from phone -> mobile
+    mobile: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
 
-  const navigate = useNavigate(); // ✅ initialize navigate
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,33 +21,24 @@ export default function Agents() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage(null);
 
     try {
-      const token = localStorage.getItem("token"); // ✅ get token
-      await axios.post("http://localhost:3001/api/agents", form, {
+      const token = localStorage.getItem("token");
+      await axios.post("https://machinez-test.vercel.app/api/agents", form, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ send in header
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      setMessage({
-        type: "success",
-        text: "✅ Agent added successfully!",
-      });
+      toast.success("Agent added successfully!"); 
 
       setForm({ name: "", email: "", mobile: "", password: "" });
 
-      // ✅ Redirect to Dashboard after short delay
       setTimeout(() => {
         navigate("/dashboard");
-      }, 1000);
+      }, 1500);
     } catch (err) {
-      setMessage({
-        type: "error",
-        text:
-          err.response?.data?.message || "❌ Failed to add agent.",
-      });
+      toast.error(err.response?.data?.message || "❌ Failed to add agent."); 
     } finally {
       setLoading(false);
     }
@@ -56,7 +47,7 @@ export default function Agents() {
   const fields = [
     { name: "name", type: "text", placeholder: "Full Name", icon: <User /> },
     { name: "email", type: "email", placeholder: "Email Address", icon: <Mail /> },
-    { name: "mobile", type: "tel", placeholder: "+91 9876543210", icon: <Phone /> }, // ✅ updated
+    { name: "mobile", type: "tel", placeholder: "+91 9876543210", icon: <Phone /> },
     { name: "password", type: "password", placeholder: "Password", icon: <Lock /> },
   ];
 
@@ -66,18 +57,6 @@ export default function Agents() {
         <h1 className="text-3xl font-bold text-indigo-600 mb-6 text-center">
           👨‍💼 Add New Agent
         </h1>
-
-        {message && (
-          <div
-            className={`p-3 mb-4 rounded-lg text-center font-medium ${
-              message.type === "success"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {message.text}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {fields.map((f) => (

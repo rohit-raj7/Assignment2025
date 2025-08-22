@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-/**
- * Seed a default admin (for setup/dev convenience)
- */
+
 export const signup = async (req, res) => {
   try {
     const { name = 'Admin', email, password } = req.body;
@@ -33,9 +31,7 @@ export const signup = async (req, res) => {
   }
 };
 
-/**
- * User Login
- */
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;

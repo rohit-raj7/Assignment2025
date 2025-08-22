@@ -7,10 +7,11 @@ const router = express.Router();
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: 5 * 1024 * 1024 }, 
+  
 });
 
-// Upload & distribute leads
+
 router.post('/', auth, upload.single('file'), uploadLeads);
 
 export default router;

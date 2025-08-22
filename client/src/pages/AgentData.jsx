@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function AllAgents() {
   const [agents, setAgents] = useState([]);
@@ -11,12 +12,16 @@ export default function AllAgents() {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/api/agents", {
+        const res = await axios.get("https://machinez-test.vercel.app/api/agents", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAgents(res.data);
+
+        // ✅ success notification
+        toast.success("✅ Agents loaded successfully!");
       } catch (err) {
         setError("Failed to fetch agents. Please login again.");
+        toast.error("❌ Failed to fetch agents!");
       } finally {
         setLoading(false);
       }
@@ -26,18 +31,22 @@ export default function AllAgents() {
       fetchAgents();
     } else {
       setError("No token found. Please login.");
+      toast.warning("⚠️ No token found. Please login.");
       setLoading(false);
     }
   }, [token]);
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/api/agents/${id}`, {
+      await axios.delete(`https://machinez-test.vercel.app/api/agents/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAgents(agents.filter((agent) => agent._id !== id));
+
+      // ✅ delete success notification
+      toast.success("🗑️ Agent deleted successfully!");
     } catch (err) {
-      alert("Failed to delete agent.");
+      toast.error("❌ Failed to delete agent.");
     }
   };
 
@@ -46,7 +55,7 @@ export default function AllAgents() {
       <h1 className="text-3xl font-bold mb-6">👨‍💼 All Agents</h1>
 
       {loading ? (
-        <p className="text-gray-600">Loading agents...</p>
+        <p className="text-gray-600">⏳ Loading agents...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : agents.length === 0 ? (

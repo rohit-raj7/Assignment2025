@@ -26,7 +26,7 @@ export default function Dashboard() {
           <p className="text-gray-600">View distribution reports (Coming Soon).</p>
         </Link>
 
-        {/* New Card */}
+
         <Link
           to="/all-agents"
           className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"

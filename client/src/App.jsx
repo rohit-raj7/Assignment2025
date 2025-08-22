@@ -5,7 +5,9 @@ import Dashboard from "./pages/Dashboard";
 import Agents from "./pages/Agents";
 import Upload from "./pages/Upload";
 import AgentsData from "./pages/AgentData";
-import Distribution from './pages/Distribution_reports'
+import Distribution from "./pages/Distribution_reports";
+import { ToastContainer } from "react-toastify";  
+import "react-toastify/dist/ReactToastify.css";  
 
 function App() {
   return (
@@ -17,11 +19,13 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/agents" element={<Agents />} />
           <Route path="/upload" element={<Upload />} />
-           <Route path="/distribution_reports" element={<Distribution />} />
-          
-           <Route path="/all-agents" element={<AgentsData />} />
+          <Route path="/distribution_reports" element={<Distribution />} />
+          <Route path="/all-agents" element={<AgentsData />} />
         </Routes>
       </div>
+
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
