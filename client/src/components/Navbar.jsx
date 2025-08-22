@@ -32,7 +32,7 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md px-6 py-3 flex items-center justify-between">
       {/* Logo / App Name */}
-      <Link to="/" className="text-2xl font-bold text-indigo-600">
+      <Link to="/dashboard" className="text-2xl font-bold text-indigo-600">
         LeadManager
       </Link>
       <div className="hidden md:flex items-center space-x-6">
